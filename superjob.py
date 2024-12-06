@@ -14,7 +14,7 @@ def predict_rub_salary(salary_from,salary_to):
         earn = (salary_from + salary_to) / 2
     return earn
 
-def SuperJob_search(programming_languages):
+def superjob_search(programming_languages):
     dotenv.load_dotenv()
     headers = {
             'X-Api-App-Id': os.getenv("APP_ID_SJ")
@@ -22,33 +22,37 @@ def SuperJob_search(programming_languages):
     jobs_sj = {}
     for language in programming_languages:
         language_stats = {}
-        vacancies_proseed = 0
-        average_salaries = 0
+        vacancies_processed = 0
+        salaries_sum = 0
+        catalogues = 48
         page = 0
         while True:
             params = {
             'town' : 'Moscow',
-            'catalogues' : '48',
+            'catalogues' : catalogues,
             'page': page,
             'keyword':language
             }
             response = requests.get('https://api.superjob.ru/2.0/vacancies/', headers = headers,params=params)
             response.raise_for_status()
-            for job in response.json()["objects"]:
+            vacancies = response.json()
+            for job in vacancies["objects"]:
                 if job['currency'] == 'rub':
-                    if job['payment_from'] !=0 or job['payment_to'] != 0:
-                        vacancies_proseed += 1
+                    if not job['payment_from']  or not job['payment_to']:
+                        vacancies_processed += 1
                         salary = predict_rub_salary(job['payment_from'],job['payment_to'])
-                        average_salaries += salary
+                        salaries_sum += salary
             page += 1
-            if response.json()['more'] == False:
+            if vacancies['more'] == False:
                 break
         try:
-            average_salaries = int(average_salaries / vacancies_proseed)
+            salaries_sum = int(salaries_sum / vacancies_processed)
         except ZeroDivisionError:
-            average_salaries = 0
-        language_stats['average_salary'] = average_salaries
-        language_stats['found'] = response.json()['total']
-        language_stats['proceed'] = vacancies_proseed
+            salaries_sum = 0
+        language_stats = {
+            'found':vacancies['total'],
+            'processed':vacancies_processed,
+            'average_salary':salaries_sum
+        }
         jobs_sj[language] = language_stats
     return jobs_sj
