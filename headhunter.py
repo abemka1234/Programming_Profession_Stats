@@ -1,4 +1,5 @@
 import requests
+from itertools import count
 from tools import predict_rub_salary
 
 def headhunter_search(programming_languages):
@@ -11,7 +12,7 @@ def headhunter_search(programming_languages):
         area = 1
         per_page = 100
         link = 'https://api.hh.ru/vacancies'
-        while True:
+        for page in count(0,1):
             params = {'text':language,
                 'area':area,
                 'per_page':per_page,
@@ -22,7 +23,6 @@ def headhunter_search(programming_languages):
             pages = vacancies['pages']
             if  page >= pages - 1:
                 break
-            page += 1
             for vacancy in vacancies['items']:
                 if vacancy['salary'] and vacancy['salary']['currency'] == 'RUR' and (vacancy['salary']['from']  or vacancy['salary']['to']):
                     vacancies_processed +=1

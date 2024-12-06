@@ -1,6 +1,7 @@
 import requests
 from tools import predict_rub_salary
 import dotenv
+from itertools import count
 import os
 
 
@@ -26,7 +27,7 @@ def superjob_search(programming_languages):
         salaries_sum = 0
         catalogues = 48
         page = 0
-        while True:
+        for page in count(0,1):
             params = {
             'town' : 'Moscow',
             'catalogues' : catalogues,
@@ -41,7 +42,6 @@ def superjob_search(programming_languages):
                         vacancies_processed += 1
                         salary = predict_rub_salary(job['payment_from'],job['payment_to'])
                         salaries_sum += salary
-            page += 1
             if vacancies['more'] == False:
                 break
         try:
