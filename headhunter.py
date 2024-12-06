@@ -24,7 +24,7 @@ def headhunter_search(programming_languages):
                 break
             page += 1
             for vacancy in vacancies['items']:
-                if vacancy['salary'] and vacancy['salary']['currency'] == 'RUR':
+                if vacancy['salary'] and vacancy['salary']['currency'] == 'RUR' and (vacancy['salary']['from']  or vacancy['salary']['to']):
                     vacancies_processed +=1
                     salaries_sum += predict_rub_salary(vacancy['salary']['from'],vacancy['salary']['to'])
         try:

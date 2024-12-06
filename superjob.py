@@ -37,8 +37,7 @@ def superjob_search(programming_languages):
             response.raise_for_status()
             vacancies = response.json()
             for job in vacancies["objects"]:
-                if job['currency'] == 'rub':
-                    if not job['payment_from']  or not job['payment_to']:
+                if job['currency'] == 'rub' and (job['payment_from']  or job['payment_to']):
                         vacancies_processed += 1
                         salary = predict_rub_salary(job['payment_from'],job['payment_to'])
                         salaries_sum += salary
