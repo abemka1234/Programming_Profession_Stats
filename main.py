@@ -1,6 +1,8 @@
 import terminaltables
 import headhunter
 import superjob
+import dotenv
+import os
 
 def make_table(Languages,name):
     table_data = (('Язык','Вакансий найдено','Вакансий обработано','Средняя зарплата'),)
@@ -11,9 +13,10 @@ def make_table(Languages,name):
 
 
 def main():
+    dotenv.load_dotenv()
     programming_languages = ['JavaScript','Java','Python','Ruby','PHP','C++','CSS','C#','C','GO']
     jobs_hh = headhunter.headhunter_search(programming_languages)
-    jobs_sj = superjob.superjob_search(programming_languages)
+    jobs_sj = superjob.superjob_search(programming_languages,os.getenv("APP_ID_SJ"))
     print(make_table(jobs_hh,'HeadHunter Професии'))
     print(make_table(jobs_sj,'Superjob Професии'))
     

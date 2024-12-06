@@ -1,8 +1,6 @@
 import requests
 from tools import predict_rub_salary
-import dotenv
 from itertools import count
-import os
 
 
 def predict_rub_salary(salary_from,salary_to):
@@ -15,10 +13,9 @@ def predict_rub_salary(salary_from,salary_to):
         earn = (salary_from + salary_to) / 2
     return earn
 
-def superjob_search(programming_languages):
-    dotenv.load_dotenv()
+def superjob_search(programming_languages,app_id):
     headers = {
-            'X-Api-App-Id': os.getenv("APP_ID_SJ")
+            'X-Api-App-Id': app_id
         }
     jobs_sj = {}
     for language in programming_languages:
