@@ -4,10 +4,10 @@ import superjob
 import dotenv
 import os
 
-def make_table(Languages,name):
+def make_table(languages,name):
     table_data = (('Язык','Вакансий найдено','Вакансий обработано','Средняя зарплата'),)
-    for name_lang,data in Languages.items() :
-        table_data +=((name_lang,data['found'],data['processed'],data['average_salary']),)
+    for name_lang,lang_jobs in languages.items() :
+        table_data +=((name_lang,lang_jobs['found'],lang_jobs['processed'],lang_jobs['average_salary']),)
     table = terminaltables.AsciiTable(table_data,name)
     return table.table
 
